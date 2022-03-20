@@ -2,22 +2,32 @@ import CrudForm from "./CrudForm";
 import CrudTable from "./CrudTable";
 import React, { useEffect, useState } from "react";
 import { helpHttp } from "../helpers/helpHttp";
+import Message from "./Message";
+import Loader from "./Loader";
 
 const CruddApi = () => {
-	const [db, setDb] = useState([]);
+	const [db, setDb] = useState(null);
 	const [dataToEdit, setDataToEdit] = useState(null);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		let url = "http://localhost:3001/santos";
+		setLoading(true);
+
+		let url = "http://localhost:3001/santo";
 		let api = helpHttp();
 
 		api.get(url).then((res) => {
 			console.log(res);
 			if (!res.err) {
 				setDb(res);
+				setError(null);
 			} else {
 				setDb(null);
+				setError(res);
 			}
+
+			setLoading(false);
 		});
 	}, []);
 
@@ -56,11 +66,20 @@ const CruddApi = () => {
 					dataToEdit={dataToEdit}
 					setDataToEdit={setDataToEdit}
 				/>
-				<CrudTable
-					data={db}
-					setDataToEdit={setDataToEdit}
-					deleteData={deleteData}
-				/>
+				{loading && <Loader />}
+				{error && (
+					<Message
+						msg={`Error ${error.status}: ${error.statusText}`}
+						bgColor="#dc3545"
+					/>
+				)}
+				{db && (
+					<CrudTable
+						data={db}
+						setDataToEdit={setDataToEdit}
+						deleteData={deleteData}
+					/>
+				)}
 			</article>
 		</>
 	);
