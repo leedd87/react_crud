@@ -14,11 +14,7 @@ const CrudTable = ({ data, setDataToEdit, deleteData }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{data.length === 0 ? (
-						<tr>
-							<td colSpan="3">Sin datos</td>
-						</tr>
-					) : (
+					{data.length > 0 ? (
 						data.map((el) => (
 							<CrudTableRow
 								key={el.id}
@@ -26,7 +22,12 @@ const CrudTable = ({ data, setDataToEdit, deleteData }) => {
 								setDataToEdit={setDataToEdit}
 								deleteData={deleteData}
 							/>
-						)) //aca le agrego el "el" de elemento para pasarlo como prop al componente CrudTableRow
+						))
+					) : (
+						<tr>
+							<td colSpan="3">Sin datos</td>
+						</tr>
+						//aca le agrego el "el" de elemento para pasarlo como prop al componente CrudTableRow
 					)}
 				</tbody>
 			</table>
