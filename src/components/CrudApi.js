@@ -17,7 +17,7 @@ const CruddApi = () => {
 		setLoading(true);
 
 		api.get(url).then((res) => {
-			console.log(res);
+			//console.log(res);
 			if (!res.err) {
 				setDb(res);
 				setError(null);
